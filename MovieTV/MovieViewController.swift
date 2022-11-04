@@ -7,13 +7,33 @@
 
 import UIKit
 
-class MovieViewController: UIViewController {
-
+class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+   
+    
+    @IBOutlet weak var mySegmentedCntrl: UISegmentedControl!
+    
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        tableView.delegate = self
+        tableView.dataSource = self
     }
+        
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            3
+        }
+        
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! MovieTableViewCell
+            
+            cell.movieName.text = "Yes Man"
+            
+            return cell
+        }
+
+
     
 
     /*
