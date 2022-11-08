@@ -19,7 +19,26 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        fetchPopularMovies()
     }
+    
+    func fetchPopularMovies() {
+        let networkManager = NetworkManager()
+        let apiKey = "2dbd75835d31fe29e22c5fcc1f402b7c"
+        let urlString =
+    "https://api.themoviedb.org/3/movie/popular?api_key=\(apiKey)&language=en-US&page=1"
+        let url = URL(string: urlString)
+        networkManager.fetchData(at: url!) { result in
+            switch result {
+            case .success(let movieResponse):
+                break
+            case .failure(let error):
+                break
+            }
+        }
+    }
+    
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             3

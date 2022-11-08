@@ -18,6 +18,8 @@
 		4DAD79CE290FF3DD00C5CF7A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DAD79CD290FF3DC00C5CF7A /* DetailViewController.swift */; };
 		4DB25A042913CCF400F601E4 /* MovieTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB25A032913CCF400F601E4 /* MovieTableViewCell.swift */; };
 		4DB25A062913D4EB00F601E4 /* TVTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB25A052913D4EB00F601E4 /* TVTableViewCell.swift */; };
+		4DB25A082916E97700F601E4 /* MovieResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB25A072916E97600F601E4 /* MovieResponse.swift */; };
+		4DB25A0A2916EB6500F601E4 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB25A092916EB6500F601E4 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		4DAD79CD290FF3DC00C5CF7A /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		4DB25A032913CCF400F601E4 /* MovieTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableViewCell.swift; sourceTree = "<group>"; };
 		4DB25A052913D4EB00F601E4 /* TVTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVTableViewCell.swift; sourceTree = "<group>"; };
+		4DB25A072916E97600F601E4 /* MovieResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieResponse.swift; sourceTree = "<group>"; };
+		4DB25A092916EB6500F601E4 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,9 +75,11 @@
 				4DAD79B928FEE0FC00C5CF7A /* ViewController.swift */,
 				4DAD79C928FEEE3900C5CF7A /* MovieViewController.swift */,
 				4DB25A032913CCF400F601E4 /* MovieTableViewCell.swift */,
+				4DB25A072916E97600F601E4 /* MovieResponse.swift */,
 				4DAD79CB28FEEE6900C5CF7A /* TVShowsViewController.swift */,
 				4DB25A052913D4EB00F601E4 /* TVTableViewCell.swift */,
 				4DAD79CD290FF3DC00C5CF7A /* DetailViewController.swift */,
+				4DB25A092916EB6500F601E4 /* NetworkManager.swift */,
 				4DAD79BB28FEE0FC00C5CF7A /* Main.storyboard */,
 				4DAD79BE28FEE10500C5CF7A /* Assets.xcassets */,
 				4DAD79C028FEE10500C5CF7A /* LaunchScreen.storyboard */,
@@ -155,10 +161,12 @@
 			files = (
 				4DAD79BA28FEE0FC00C5CF7A /* ViewController.swift in Sources */,
 				4DAD79CC28FEEE6900C5CF7A /* TVShowsViewController.swift in Sources */,
+				4DB25A0A2916EB6500F601E4 /* NetworkManager.swift in Sources */,
 				4DB25A042913CCF400F601E4 /* MovieTableViewCell.swift in Sources */,
 				4DAD79B628FEE0FC00C5CF7A /* AppDelegate.swift in Sources */,
 				4DAD79CE290FF3DD00C5CF7A /* DetailViewController.swift in Sources */,
 				4DB25A062913D4EB00F601E4 /* TVTableViewCell.swift in Sources */,
+				4DB25A082916E97700F601E4 /* MovieResponse.swift in Sources */,
 				4DAD79B828FEE0FC00C5CF7A /* SceneDelegate.swift in Sources */,
 				4DAD79CA28FEEE3A00C5CF7A /* MovieViewController.swift in Sources */,
 			);
