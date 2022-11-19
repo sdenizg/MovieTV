@@ -2,8 +2,10 @@
 //  MovieResponse.swift
 //  MovieTV
 //
-//  Created by Ş. Deniz Geçginer on 5.11.2022.
+//  Created by Ş. Deniz Geçginer on 15.11.2022.
 //
+
+import Foundation
 
 import Foundation
 
