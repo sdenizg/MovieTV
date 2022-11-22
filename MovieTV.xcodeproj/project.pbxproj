@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D51FDA6292A2E7B005690F5 /* TVShowsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D51FDA5292A2E7B005690F5 /* TVShowsResponse.swift */; };
 		4D7A2EF5291FDF40000B724D /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 4D7A2EF4291FDF40000B724D /* Alamofire */; };
 		4D7A2EF729239252000B724D /* MovieResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7A2EF629239252000B724D /* MovieResponse.swift */; };
+		4D7A2EFA2928F818000B724D /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 4D7A2EF92928F818000B724D /* Kingfisher */; };
 		4DAD79B628FEE0FC00C5CF7A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DAD79B528FEE0FC00C5CF7A /* AppDelegate.swift */; };
 		4DAD79B828FEE0FC00C5CF7A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DAD79B728FEE0FC00C5CF7A /* SceneDelegate.swift */; };
 		4DAD79BA28FEE0FC00C5CF7A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DAD79B928FEE0FC00C5CF7A /* ViewController.swift */; };
@@ -23,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4D51FDA5292A2E7B005690F5 /* TVShowsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowsResponse.swift; sourceTree = "<group>"; };
 		4D7A2EF629239252000B724D /* MovieResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieResponse.swift; sourceTree = "<group>"; };
 		4DAD79B228FEE0FC00C5CF7A /* MovieTV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieTV.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DAD79B528FEE0FC00C5CF7A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -44,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D7A2EFA2928F818000B724D /* Kingfisher in Frameworks */,
 				4D7A2EF5291FDF40000B724D /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -78,6 +82,7 @@
 				4D7A2EF629239252000B724D /* MovieResponse.swift */,
 				4DAD79CB28FEEE6900C5CF7A /* TVShowsViewController.swift */,
 				4DB25A052913D4EB00F601E4 /* TVTableViewCell.swift */,
+				4D51FDA5292A2E7B005690F5 /* TVShowsResponse.swift */,
 				4DAD79CD290FF3DC00C5CF7A /* DetailViewController.swift */,
 				4DAD79BB28FEE0FC00C5CF7A /* Main.storyboard */,
 				4DAD79BE28FEE10500C5CF7A /* Assets.xcassets */,
@@ -105,6 +110,7 @@
 			name = MovieTV;
 			packageProductDependencies = (
 				4D7A2EF4291FDF40000B724D /* Alamofire */,
+				4D7A2EF92928F818000B724D /* Kingfisher */,
 			);
 			productName = MovieTV;
 			productReference = 4DAD79B228FEE0FC00C5CF7A /* MovieTV.app */;
@@ -136,6 +142,7 @@
 			mainGroup = 4DAD79A928FEE0FC00C5CF7A;
 			packageReferences = (
 				4D7A2EF3291FDF40000B724D /* XCRemoteSwiftPackageReference "Alamofire" */,
+				4D7A2EF82928F817000B724D /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 4DAD79B328FEE0FC00C5CF7A /* Products */;
 			projectDirPath = "";
@@ -165,6 +172,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4DAD79BA28FEE0FC00C5CF7A /* ViewController.swift in Sources */,
+				4D51FDA6292A2E7B005690F5 /* TVShowsResponse.swift in Sources */,
 				4DAD79CC28FEEE6900C5CF7A /* TVShowsViewController.swift in Sources */,
 				4DB25A042913CCF400F601E4 /* MovieTableViewCell.swift in Sources */,
 				4DAD79B628FEE0FC00C5CF7A /* AppDelegate.swift in Sources */,
@@ -400,6 +408,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		4D7A2EF82928F817000B724D /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -407,6 +423,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4D7A2EF3291FDF40000B724D /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		4D7A2EF92928F818000B724D /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4D7A2EF82928F817000B724D /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

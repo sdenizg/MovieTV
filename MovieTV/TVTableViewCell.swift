@@ -8,7 +8,6 @@
 import UIKit
 
 class TVTableViewCell: UITableViewCell {
-
     
     @IBOutlet weak var tvImg: UIImageView!
     @IBOutlet weak var tvName: UILabel!
