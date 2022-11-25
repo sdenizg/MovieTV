@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class DetailViewController: UIViewController {
     
@@ -22,6 +23,7 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
 
        /* detailName.text = movie.title

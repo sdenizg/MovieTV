@@ -25,7 +25,7 @@ struct TVItem: Decodable {
     let origin_country = [String]()
     let original_name: String
     let original_language : String
-    let backdrop_path: String
+    let backdrop_path: String?
     let popularity: Double
     let vote_count: Int
     let vote_average: Float
