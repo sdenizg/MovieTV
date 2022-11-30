@@ -19,6 +19,9 @@ class TVShowsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     var items: [TVItem] = []
     
+    var itemId: Int!
+    var isTV: Bool!
+    
     @IBAction func mySegmentedControl(_ sender: UISegmentedControl) {
         let sended = sender.selectedSegmentIndex
         let selectedTab = TVTabType(rawValue: sended)
@@ -52,7 +55,7 @@ class TVShowsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         request.responseDecodable(of: TVShowsResponse.self) { (response) in
             guard let popularShows = response.value else { return }
-            print(popularShows)
+           // print(popularShows)
             self.items = popularShows.results
             self.tableView.reloadData()
             
@@ -66,7 +69,7 @@ class TVShowsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         request.responseDecodable(of: TVShowsResponse.self) { (response) in
             guard let topRatedShows = response.value else { return }
-            print(topRatedShows)
+          //  print(topRatedShows)
             self.items = topRatedShows.results
             self.tableView.reloadData()
             
@@ -98,4 +101,20 @@ class TVShowsViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 176.0
     }
+     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedItem = items[indexPath.row]
+        performSegue(withIdentifier: "showDetailsTV", sender: selectedItem)
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? DetailViewController {
+            let object = sender as! TVItem
+            destination.itemId = object.id
+            destination.isTV = true
+        }
+    }
+    
+    
 }
