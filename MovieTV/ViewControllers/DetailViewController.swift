@@ -33,7 +33,7 @@ class DetailViewController: UIViewController {
          detailRuntime.text = "0" */
         
         fetchMovieDetails()
-       // fetchTVDetails()
+        fetchTVDetails()
     }
     
     func fetchMovieDetails() {
@@ -46,12 +46,13 @@ class DetailViewController: UIViewController {
             print(details)
         }
         
+    }
         func fetchTVDetails() {
             let request = AF.request("https://api.themoviedb.org/3/tv/\(itemId!)?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US")
             request.responseJSON { (data) in
                 print(data)
             }
-            request.responseDecodable(of: DetailItem.self) { (response) in
+            request.responseDecodable(of: TVDetailItem.self) { (response) in
                 guard let details = response.value else { return }
                 print(details)
             }
@@ -68,4 +69,4 @@ class DetailViewController: UIViewController {
          */
         
     }
-}
+
