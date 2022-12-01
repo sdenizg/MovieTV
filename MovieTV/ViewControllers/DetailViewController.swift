@@ -7,11 +7,13 @@
 
 import UIKit
 import Alamofire
+import Kingfisher
 
 class DetailViewController: UIViewController {
     
-    //  var items: [DetailItem] = []
-    
+    var detailItems: [DetailItem] = []
+    var tvDetailItems: [TVDetailItem] = []
+        
     @IBOutlet weak var detailImg: UIImageView!
     @IBOutlet weak var detailName: UILabel!
     @IBOutlet weak var detailRating: UILabel!
@@ -25,12 +27,20 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        /* detailName.text = DetailItem.original_title
-         detailRating.text = String(movie.vote_average)
-         detailPopularity.text = String(movie.popularity)
-         detailOverview.text = movie.overview
-         detailRuntime.text = "0" */
+        
+        if isMovie == true {
+            detailName.text = detailItems[itemId].original_title // FATAL ERROR
+            detailRating.text = String(detailItems[itemId].vote_average)
+            detailPopularity.text = String(detailItems[itemId].popularity)
+            detailOverview.text = detailItems[itemId].overview
+            detailRuntime.text = String(detailItems[itemId].runtime)
+            
+            // image
+            detailImg.kf.indicatorType = .activity
+            let imgURL = "https://image.tmdb.org/t/p/w500\(detailItems[itemId].poster_path)"
+            let url = URL(string: imgURL)
+            detailImg.kf.setImage(with: url)
+        }
         
         fetchMovieDetails()
         fetchTVDetails()
