@@ -52,7 +52,7 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func fetchPopularMovies() {
         let request = AF.request("https://api.themoviedb.org/3/movie/popular?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US&page=1")
         request.responseJSON { (data) in
-            print(data)
+          //  print(data)
         }
         request.responseDecodable(of: MovieResponse.self) { (response) in
             guard let popularMovies = response.value else { return }
@@ -66,7 +66,7 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func fetchTopRatedMovies() {
         let request = AF.request("https://api.themoviedb.org/3/movie/top_rated?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US&page=1")
         request.responseJSON { (data) in
-            print(data)
+           // print(data)
         }
         request.responseDecodable(of: MovieResponse.self) { (response) in
             guard let topRatedMovies = response.value else { return }
@@ -80,7 +80,7 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func fetchNowPlayingMovies() {
         let request = AF.request("https://api.themoviedb.org/3/movie/now_playing?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US&page=1")
         request.responseJSON { (data) in
-            print(data)
+           // print(data)
         }
         request.responseDecodable(of: MovieResponse.self) { (response) in
             guard let nowPlayingMovies = response.value else { return }

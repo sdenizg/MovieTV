@@ -172,7 +172,7 @@
             <objects>
                 <viewController id="2cj-qf-7n5" customClass="DetailViewController" customModule="MovieTV" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oK9-JF-G43">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="1203"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="1257"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X0C-5x-uWy">
@@ -278,6 +278,14 @@
                     </view>
                     <navigationItem key="navigationItem" id="bCq-DR-lI0"/>
                     <size key="freeformSize" width="414" height="1257"/>
+                    <connections>
+                        <outlet property="detailImg" destination="KnE-ro-CSg" id="skh-qO-V8n"/>
+                        <outlet property="detailName" destination="wOv-Qw-XIW" id="rix-aM-fW4"/>
+                        <outlet property="detailOverview" destination="bK3-Sn-kIc" id="Jvg-M3-Pxa"/>
+                        <outlet property="detailPopularity" destination="qfK-gA-Ovg" id="eAb-Ks-egU"/>
+                        <outlet property="detailRating" destination="gpf-a2-YvG" id="st7-Cy-Zgy"/>
+                        <outlet property="detailRuntime" destination="ddb-Lx-2ir" id="1Th-ao-Dls"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vQP-PO-DT7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -434,7 +442,6 @@
                                             <outlet property="tvName" destination="ESC-1Q-KnJ" id="npP-Db-vSU"/>
                                             <outlet property="tvRating" destination="pph-g2-VXx" id="x4s-Uo-lxd"/>
                                             <outlet property="tvViewNum" destination="VEW-Q6-Hlw" id="mdb-80-6lo"/>
-                                            <segue destination="2cj-qf-7n5" kind="showDetail" identifier="showDetailsTV" id="VqD-s2-geB"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -447,6 +454,7 @@
                     <navigationItem key="navigationItem" id="AmM-rv-i4Z"/>
                     <connections>
                         <outlet property="tableView" destination="Msf-dp-Gid" id="Nno-Dm-ups"/>
+                        <segue destination="2cj-qf-7n5" kind="show" identifier="showDetailsTV" id="g0B-Ar-RHi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bNB-yv-ghD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -455,7 +463,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="VqD-s2-geB"/>
+        <segue reference="g0B-Ar-RHi"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="calendar" catalog="system" width="128" height="106"/>
