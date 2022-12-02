@@ -10,7 +10,7 @@ import Foundation
 struct DetailItem: Decodable {
     let adult: Bool
     let backdrop_path: String
-    let belongs_to_collection: Bool?
+   // let belongs_to_collection: Bool?
     let budget: Int
     let genres: [Genre]
     let homepage: String
@@ -43,7 +43,7 @@ struct Genre: Decodable {
 
 struct ProductionCompanies: Decodable {
     let id: Int
-    let logo_path: String
+  //  let logo_path: String
     let name: String
     let origin_country: String
     
@@ -56,6 +56,6 @@ struct ProductionCountries: Decodable {
 
 struct SpokenLanguages: Decodable {
     let english_name: String
-    let iso_3166_1: String
+   // let iso_3166_1: String
     let name: String
 }

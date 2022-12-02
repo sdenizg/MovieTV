@@ -12,7 +12,7 @@ import Kingfisher
 class DetailViewController: UIViewController {
     
     var detailItems: DetailItem!
-    var tvDetailItems: [TVDetailItem] = []
+    var tvDetailItems: TVDetailItem!
     
     @IBOutlet weak var detailImg: UIImageView!
     @IBOutlet weak var detailName: UILabel!
@@ -29,40 +29,66 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         fetchMovieDetails()
-        fetchTVDetails()
+        //fetchTVDetails()
     }
     
     func fetchMovieDetails() {
         let request = AF.request("https://api.themoviedb.org/3/movie/\(itemId!)?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US")
-        request.responseJSON { (data) in
-           // print(data)
-        }
+        /* request.responseJSON { (data) in
+         // print(data)
+         } */
         request.responseDecodable(of: DetailItem.self) { [self] (response) in
-            guard let details = response.value else { return }
-           // print(details)
-            self.detailItems = details
-            detailName.text = detailItems.original_title
-            detailRating.text = String(detailItems.vote_average)
-            detailPopularity.text = String(detailItems.popularity)
-            detailOverview.text = detailItems.overview
-            detailRuntime.text = String(detailItems.runtime)
             
-            // image
-            detailImg.kf.indicatorType = .activity
-            let imgURL = "https://image.tmdb.org/t/p/w500\(detailItems.poster_path)"
-            let url = URL(string: imgURL)
-            detailImg.kf.setImage(with: url)
+            switch response.result {
+            case .success(_):
+                guard let details = response.value else { return }
+                // print(details)
+                self.detailItems = details
+                detailName.text = detailItems.original_title
+                detailRating.text = String(detailItems.vote_average)
+                detailPopularity.text = String(detailItems.popularity)
+                detailOverview.text = detailItems.overview
+                detailRuntime.text = String(detailItems.runtime)
+                
+                // image
+                detailImg.kf.indicatorType = .activity
+                let imgURL = "https://image.tmdb.org/t/p/w500\(detailItems.poster_path)"
+                let url = URL(string: imgURL)
+                detailImg.kf.setImage(with: url)
+                
+            case .failure(let DecodingError):
+                print(DecodingError)
+            }
         }
     }
     
     func fetchTVDetails() {
         let request = AF.request("https://api.themoviedb.org/3/tv/\(itemId!)?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US")
-        request.responseJSON { (data) in
-            print(data)
-        }
-        request.responseDecodable(of: TVDetailItem.self) { (response) in
-            guard let details = response.value else { return }
-            print(details)
+        /* request.responseJSON { (data) in
+         // print(data)
+         } */
+        request.responseDecodable(of: TVDetailItem.self) { [self] (response) in
+            
+            switch response.result {
+            case .success(_):
+                guard let tvDetails = response.value else { return }
+                // print(details)
+                self.tvDetailItems = tvDetails
+                detailName.text = tvDetailItems.original_name
+                detailRating.text = String(tvDetailItems.vote_average)
+                detailPopularity.text = String(tvDetailItems.popularity)
+                detailOverview.text = tvDetailItems.overview
+                detailRuntime.text = String(tvDetailItems.episode_run_time)
+                
+                // image
+                detailImg.kf.indicatorType = .activity
+                let imgURL = "https://image.tmdb.org/t/p/w500\(tvDetailItems.poster_path)"
+                let url = URL(string: imgURL)
+                detailImg.kf.setImage(with: url)
+                
+            case .failure(let DecodingError):
+                print(DecodingError)
+            }
         }
     }
     

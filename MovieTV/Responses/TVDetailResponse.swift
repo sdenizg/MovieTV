@@ -8,10 +8,10 @@
 import Foundation
 
 struct TVDetailItem: Decodable {
-    let adult: Bool
-    let backdrop_path: String
+   // let adult: Bool
+  //  let backdrop_path: String
     let created_by: [CreatedBy]
-    var episode_run_time = [Int]()
+    var episode_run_time: Int
     let first_air_date: String
     let genres: [Genres]
     let homepage: String
@@ -123,7 +123,7 @@ struct Seasons: Decodable {
 
 struct SpokenLanguage: Decodable {
     let english_name: String
-    let iso_639_1: String
+    //let iso_639_1: Int
     let name: String
 }
 
