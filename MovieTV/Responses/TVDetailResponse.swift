@@ -8,8 +8,8 @@
 import Foundation
 
 struct TVDetailItem: Decodable {
-   // let adult: Bool
-  //  let backdrop_path: String
+    // let adult: Bool
+    //  let backdrop_path: String
     let created_by: [CreatedBy]
     var episode_run_time: Int
     let first_air_date: String

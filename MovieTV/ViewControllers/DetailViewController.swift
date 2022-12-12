@@ -9,7 +9,10 @@ import UIKit
 import Alamofire
 import Kingfisher
 
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    let tvCast: [TVCast] = []
+    let movieCast: [MovieCast] = []
     
     var detailItems: DetailItem!
     var tvDetailItems: TVDetailItem!
@@ -27,6 +30,9 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
         
         fetchMovieDetails()
         //fetchTVDetails()
@@ -91,6 +97,75 @@ class DetailViewController: UIViewController {
             }
         }
     }
+    
+    
+    
+    func TVCastDetails() {
+        let request = AF.request("https://api.themoviedb.org/3/tv/\(itemId!)/credits?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US")
+        /* request.responseJSON { (data) in
+         // print(data)
+         } */
+        request.responseDecodable(of: TVCastResponse.self) { [self] (response) in
+            guard let tvCastDetails = response.value else { return }
+            print(tvCastDetails)
+            //self.tvCast = tvCastDetails.results
+            //self.collectionView.reloadData()
+        }
+    }
+    
+    func MovieCastDetails() {
+        let request = AF.request("https://api.themoviedb.org/3/movie/\(itemId!)/credits?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US")
+        /* request.responseJSON { (data) in
+         // print(data)
+         } */
+        request.responseDecodable(of: MovieCastResponse.self) { [self] (response) in
+            guard let movieCastDetails = response.value else { return }
+            print(movieCastDetails)
+            //self.tvCast = tvCastDetails.results
+            //self.collectionView.reloadData()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if isMovie == true {
+            movieCast.count
+        } else if isTV == true {
+            tvCast.count
+        } else {
+            return 0
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CastCollectionViewCell
+        
+        if isMovie == true {
+            //cell.tvName.text = items[indexPath.row].original_name
+            
+            cell.actName.text = movieCast[indexPath.row].original_name
+            cell.charName.text = movieCast[indexPath.row].name
+            
+            cell.actImg.kf.indicatorType = .activity
+            let imgURL = "https://image.tmdb.org/t/p/w500\(movieCast[indexPath.row].profile_path)"
+            let url = URL(string: imgURL)
+            cell.actImg.kf.setImage(with: url)
+            
+        } else if isTV == true {
+            cell.actName.text = tvCast[indexPath.row].original_name
+            cell.charName.text = tvCast[indexPath.row].name
+            
+            cell.actImg.kf.indicatorType = .activity
+            let imgURL = "https://image.tmdb.org/t/p/w500\(tvCast[indexPath.row].profile_path)"
+            let url = URL(string: imgURL)
+            cell.actImg.kf.setImage(with: url)
+            
+        } else {
+            print("error")
+        }
+        
+    }
+    
+    
     
     /*
      // MARK: - Navigation
