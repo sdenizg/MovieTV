@@ -11,8 +11,8 @@ import Kingfisher
 
 class DetailViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    let tvCast: [TVCast] = []
-    let movieCast: [MovieCast] = []
+    var tvCast: [TVCast] = []
+    var movieCast: [MovieCast] = []
     
     var detailItems: DetailItem!
     var tvDetailItems: TVDetailItem!
@@ -22,7 +22,8 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
     @IBOutlet weak var detailRating: UILabel!
     @IBOutlet weak var detailPopularity: UILabel!
     @IBOutlet weak var detailRuntime: UILabel!
-    @IBOutlet weak var detailOverview: UITextView!
+    @IBOutlet weak var detailOverview: UILabel!
+    
     
     var itemId: Int!
     var isMovie: Bool!
@@ -36,8 +37,16 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        fetchMovieDetails()
-        //fetchTVDetails()
+        
+        if isMovie == true {
+            fetchMovieDetails()
+            MovieCastDetails()
+            
+        } else if isTV == true {
+            fetchTVDetails()
+            TVCastDetails()
+        }
+        
     }
     
     func fetchMovieDetails() {
@@ -104,30 +113,41 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func TVCastDetails() {
         let request = AF.request("https://api.themoviedb.org/3/tv/\(itemId!)/credits?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US")
-        request.responseJSON { (data) in
-            print(data)
-        }
+        
         request.responseDecodable(of: TVCastResponse.self) { [self] (response) in
-            guard let tvCastDetails = response.value else { return }
-            print(tvCastDetails)
-            //self.tvCast = tvCastDetails.results
-            //self.collectionView.reloadData()
+            
+            switch response.result {
+            case .success(_):
+                guard let tvCastDetails = response.value else { return }
+                print(tvCastDetails)
+                self.tvCast = tvCastDetails.cast
+                self.collectionView.reloadData()
+
+                
+            case .failure(let DecodingError):
+                print(DecodingError)
+            }
         }
     }
     
     func MovieCastDetails() {
         let request = AF.request("https://api.themoviedb.org/3/movie/\(itemId!)/credits?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US")
-        request.responseJSON { (data) in
-            print(data)
-        }
+        
         request.responseDecodable(of: MovieCastResponse.self) { [self] (response) in
-            guard let movieCastDetails = response.value else { return }
-            print(movieCastDetails)
-            //self.tvCast = tvCastDetails.results
-            //self.collectionView.reloadData()
+            
+            switch response.result {
+            case .success(_):
+                guard let movieCastDetails = response.value else { return }
+                print(movieCastDetails)
+                self.movieCast = movieCastDetails.cast
+                self.collectionView.reloadData()
+
+                
+            case .failure(let DecodingError):
+                print(DecodingError)
+            }
         }
     }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if isMovie == true {
             return movieCast.count
@@ -140,10 +160,7 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CastCollectionViewCell
-        
         if isMovie == true {
-            //cell.tvName.text = items[indexPath.row].original_name
-            
             cell.actName.text = movieCast[indexPath.row].original_name
             cell.charName.text = movieCast[indexPath.row].name
             

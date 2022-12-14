@@ -20,8 +20,8 @@ struct TVCast: Decodable {
     let name: String
     let original_name: String
     let popularity: Double
-    let profile_path : String
-    let cast_id: Int
+    let profile_path : String?
+   //  let cast_id: Int
     let character: String
     let credit_id: String
     let order: Int
