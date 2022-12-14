@@ -13,7 +13,7 @@ struct TVCastResponse: Decodable {
 }
 
 struct TVCast: Decodable {
-    let adult: Bool
+   // let adult: Bool
     let gender: Int
     let id: Int
     let known_for_department: String

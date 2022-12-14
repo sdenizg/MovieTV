@@ -28,6 +28,8 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
     var isMovie: Bool!
     var isTV: Bool!
     
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -102,9 +104,9 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func TVCastDetails() {
         let request = AF.request("https://api.themoviedb.org/3/tv/\(itemId!)/credits?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US")
-        /* request.responseJSON { (data) in
-         // print(data)
-         } */
+        request.responseJSON { (data) in
+            print(data)
+        }
         request.responseDecodable(of: TVCastResponse.self) { [self] (response) in
             guard let tvCastDetails = response.value else { return }
             print(tvCastDetails)
@@ -115,9 +117,9 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func MovieCastDetails() {
         let request = AF.request("https://api.themoviedb.org/3/movie/\(itemId!)/credits?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US")
-        /* request.responseJSON { (data) in
-         // print(data)
-         } */
+        request.responseJSON { (data) in
+            print(data)
+        }
         request.responseDecodable(of: MovieCastResponse.self) { [self] (response) in
             guard let movieCastDetails = response.value else { return }
             print(movieCastDetails)
@@ -128,9 +130,9 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if isMovie == true {
-            movieCast.count
+            return movieCast.count
         } else if isTV == true {
-            tvCast.count
+            return tvCast.count
         } else {
             return 0
         }
@@ -149,6 +151,7 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
             let imgURL = "https://image.tmdb.org/t/p/w500\(movieCast[indexPath.row].profile_path)"
             let url = URL(string: imgURL)
             cell.actImg.kf.setImage(with: url)
+            return cell
             
         } else if isTV == true {
             cell.actName.text = tvCast[indexPath.row].original_name
@@ -158,11 +161,13 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
             let imgURL = "https://image.tmdb.org/t/p/w500\(tvCast[indexPath.row].profile_path)"
             let url = URL(string: imgURL)
             cell.actImg.kf.setImage(with: url)
+            return cell
             
         } else {
             print("error")
         }
         
+        return cell
     }
     
     
