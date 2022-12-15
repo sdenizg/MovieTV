@@ -65,7 +65,7 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
                 detailRating.text = String(detailItems.vote_average)
                 detailPopularity.text = String(detailItems.popularity)
                 detailOverview.text = detailItems.overview
-                detailRuntime.text = String(detailItems.runtime)
+                detailRuntime.text = "\(String(detailItems.runtime)) min"
                 
                 // image
                 detailImg.kf.indicatorType = .activity
@@ -95,8 +95,8 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
                 detailRating.text = String(tvDetailItems.vote_average)
                 detailPopularity.text = String(tvDetailItems.popularity)
                 detailOverview.text = tvDetailItems.overview
-                detailRuntime.text = String(tvDetailItems.episode_run_time)
-                
+                detailRuntime.text = "\(String(tvDetailItems.episode_run_time)) min"
+
                 // image
                 detailImg.kf.indicatorType = .activity
                 let imgURL = "https://image.tmdb.org/t/p/w500\(tvDetailItems.poster_path)"
@@ -161,21 +161,23 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CastCollectionViewCell
         if isMovie == true {
-            cell.actName.text = movieCast[indexPath.row].original_name
-            cell.charName.text = movieCast[indexPath.row].name
+            cell.actName.text = movieCast[indexPath.item].original_name
+            cell.charName.text = movieCast[indexPath.item].character
             
             cell.actImg.kf.indicatorType = .activity
-            let imgURL = "https://image.tmdb.org/t/p/w500\(movieCast[indexPath.row].profile_path)"
+            guard let profilePath = movieCast[indexPath.item].profile_path else {return cell}
+            let imgURL = "https://image.tmdb.org/t/p/w500\(profilePath)"
             let url = URL(string: imgURL)
             cell.actImg.kf.setImage(with: url)
             return cell
             
         } else if isTV == true {
-            cell.actName.text = tvCast[indexPath.row].original_name
-            cell.charName.text = tvCast[indexPath.row].name
+            cell.actName.text = tvCast[indexPath.item].original_name
+            cell.charName.text = tvCast[indexPath.item].character
             
             cell.actImg.kf.indicatorType = .activity
-            let imgURL = "https://image.tmdb.org/t/p/w500\(tvCast[indexPath.row].profile_path)"
+            guard let tvProfilePath = tvCast[indexPath.item].profile_path else {return cell}
+            let imgURL = "https://image.tmdb.org/t/p/w500\(tvProfilePath)"
             let url = URL(string: imgURL)
             cell.actImg.kf.setImage(with: url)
             return cell
@@ -187,6 +189,10 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
         return cell
     }
     
+    /*func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        return CGSize(width: UIScreen.main.bounds.width/3-16, height: UIScreen.main.bounds.width/3+30)
+    } */
     
     
     /*
