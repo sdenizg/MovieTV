@@ -13,7 +13,7 @@ class MovieViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     var items: [MovieItem] = []
     private let apiKey = "2dbd75835d31fe29e22c5fcc1f402b7c"
-
+    var movieType: String = ""
     
     @IBAction private func movieSegmentedControl(_ sender: UISegmentedControl) {
         let sended = sender.selectedSegmentIndex
@@ -21,10 +21,13 @@ class MovieViewController: UIViewController {
         
         switch selectedTab {
         case .popular:
+            movieType = "popular"
             fetchPopularMovies()
         case .nowPlaying:
+            movieType = "now_playing"
             fetchNowPlayingMovies()
         case .topRated:
+            movieType = "top_rated"
             fetchTopRatedMovies()
         case .none:
             break
@@ -41,31 +44,23 @@ class MovieViewController: UIViewController {
     }
     
     private func fetchPopularMovies() {
-        let request = AF.request("https://api.themoviedb.org/3/movie/popular?api_key=\(apiKey)&language=en-US&page=1")
-        request.responseDecodable(of: MovieResponse.self) { [weak self] (response) in
-            guard let self = self else { return }
-            guard let popularMovies = response.value else { return }
-            self.items = popularMovies.results
-            self.tableView.reloadData()
-        }
+        fetchMovies()
     }
     
     private func fetchTopRatedMovies() {
-        let request = AF.request("https://api.themoviedb.org/3/movie/top_rated?api_key=\(apiKey)&language=en-US&page=1")
-        request.responseDecodable(of: MovieResponse.self) { [weak self] (response) in
-            guard let self = self else { return }
-            guard let topRatedMovies = response.value else { return }
-            self.items = topRatedMovies.results
-            self.tableView.reloadData()
-        }
+        fetchMovies()
     }
     
     private func fetchNowPlayingMovies() {
-        let request = AF.request("https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)&language=en-US&page=1")
+        fetchMovies()
+    }
+    
+    private func fetchMovies() {
+        let request = AF.request("https://api.themoviedb.org/3/movie/\(movieType)?api_key=\(apiKey)&language=en-US&page=1")
         request.responseDecodable(of: MovieResponse.self) { [weak self] (response) in
             guard let self = self else { return }
-            guard let nowPlayingMovies = response.value else { return }
-            self.items = nowPlayingMovies.results
+            guard let movies = response.value else { return }
+            self.items = movies.results
             self.tableView.reloadData()
         }
     }

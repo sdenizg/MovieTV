@@ -14,16 +14,18 @@ class TVShowsViewController: UIViewController {
      var itemId: Int?
      var isTV: Bool?
      private let apiKey = "2dbd75835d31fe29e22c5fcc1f402b7c"
+     var tvProgrammeType: String = ""
      
-    
      @IBAction private func tvSegmentedControl(_ sender: UISegmentedControl) {
           let sended = sender.selectedSegmentIndex
           let selectedTab = TVTabType(rawValue: sended)
           
           switch selectedTab {
           case .popular:
+               tvProgrammeType = "popular"
                fetchPopularTVShows()
           case .topRated:
+               tvProgrammeType = "top_rated"
                fetchTopRatedTVShows()
           case .none:
                break
@@ -40,21 +42,18 @@ class TVShowsViewController: UIViewController {
      }
      
      private func fetchPopularTVShows() {
-          let request = AF.request("https://api.themoviedb.org/3/tv/popular?api_key=\(apiKey)&language=en-US&page=1")
-          request.responseDecodable(of: TVShowsResponse.self) { [weak self] (response) in
-               guard let self = self else { return }
-               guard let popularShows = response.value else { return }
-               self.items = popularShows.results
-               self.tableView.reloadData()
-          }
+          fetchTVShow()
      }
      
      private func fetchTopRatedTVShows() {
-          let request = AF.request("https://api.themoviedb.org/3/tv/top_rated?api_key=\(apiKey)&language=en-US&page=1")
+          fetchTVShow()
+     }
+     private func fetchTVShow() {
+          let request = AF.request("https://api.themoviedb.org/3/tv/\(tvProgrammeType)?api_key=\(apiKey)&language=en-US&page=1")
           request.responseDecodable(of: TVShowsResponse.self) { [weak self] (response) in
                guard let self = self else { return }
-               guard let topRatedShows = response.value else { return }
-               self.items = topRatedShows.results
+               guard let tvShows = response.value else { return }
+               self.items = tvShows.results
                self.tableView.reloadData()
           }
      }
