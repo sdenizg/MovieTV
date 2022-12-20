@@ -1,10 +1,3 @@
-//
-//  TVShowsViewController.swift
-//  MovieTV
-//
-//  Created by Ş. Deniz Geçginer on 18.10.2022.
-//
-
 import UIKit
 import Alamofire
 import Kingfisher
@@ -14,15 +7,16 @@ enum TVTabType: Int {
      case topRated = 1
 }
 
-
-class TVShowsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class TVShowsViewController: UIViewController {
      
+     @IBOutlet weak var tableView: UITableView!
      var items: [TVItem] = []
+     var itemId: Int?
+     var isTV: Bool?
+     private let apiKey = "2dbd75835d31fe29e22c5fcc1f402b7c"
      
-     var itemId: Int!
-     var isTV: Bool!
-     
-     @IBAction func mySegmentedControl(_ sender: UISegmentedControl) {
+    
+     @IBAction private func tvSegmentedControl(_ sender: UISegmentedControl) {
           let sended = sender.selectedSegmentIndex
           let selectedTab = TVTabType(rawValue: sended)
           
@@ -36,8 +30,6 @@ class TVShowsViewController: UIViewController, UITableViewDelegate, UITableViewD
           }
      }
      
-     @IBOutlet weak var tableView: UITableView!
-     
      override func viewDidLoad() {
           super.viewDidLoad()
           
@@ -45,67 +37,44 @@ class TVShowsViewController: UIViewController, UITableViewDelegate, UITableViewD
           tableView.dataSource = self
           
           fetchPopularTVShows()
-          
      }
      
-     func fetchPopularTVShows() {
-          let request = AF.request("https://api.themoviedb.org/3/tv/popular?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US&page=1")
-          request.responseJSON { (data) in
-               print(data)
-          }
-          request.responseDecodable(of: TVShowsResponse.self) { (response) in
+     private func fetchPopularTVShows() {
+          let request = AF.request("https://api.themoviedb.org/3/tv/popular?api_key=\(apiKey)&language=en-US&page=1")
+          request.responseDecodable(of: TVShowsResponse.self) { [weak self] (response) in
+               guard let self = self else { return }
                guard let popularShows = response.value else { return }
-               // print(popularShows)
                self.items = popularShows.results
                self.tableView.reloadData()
-               
           }
      }
      
-     func fetchTopRatedTVShows() {
-          let request = AF.request("https://api.themoviedb.org/3/tv/top_rated?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US&page=1")
-          request.responseJSON { (data) in
-               print(data)
-          }
-          request.responseDecodable(of: TVShowsResponse.self) { (response) in
+     private func fetchTopRatedTVShows() {
+          let request = AF.request("https://api.themoviedb.org/3/tv/top_rated?api_key=\(apiKey)&language=en-US&page=1")
+          request.responseDecodable(of: TVShowsResponse.self) { [weak self] (response) in
+               guard let self = self else { return }
                guard let topRatedShows = response.value else { return }
-               //  print(topRatedShows)
                self.items = topRatedShows.results
                self.tableView.reloadData()
-               
           }
      }
-     
-     
-     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-          items.count
-     }
+}
+
+extension TVShowsViewController: UITableViewDataSource {
      
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
           let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TVTableViewCell
           
-          cell.tvName.text = items[indexPath.row].original_name
-          cell.tvViewNum.text = String(items[indexPath.row].popularity)
-          cell.tvDate.text = items[indexPath.row].first_air_date
-          cell.tvRating.text = String(items[indexPath.row].vote_average)
-          
-          // image
-          cell.tvImg.kf.indicatorType = .activity
+          cell.tvNameLabel.text = items[indexPath.row].original_name
+          cell.tvViewNumLabel.text = String(items[indexPath.row].popularity)
+          cell.tvDateLabel.text = items[indexPath.row].first_air_date
+          cell.tvRatingLabel.text = String(items[indexPath.row].vote_average)
+          cell.tvImageView.kf.indicatorType = .activity
           let imgURL = "https://image.tmdb.org/t/p/w500\(items[indexPath.row].poster_path)"
           let url = URL(string: imgURL)
-          cell.tvImg.kf.setImage(with: url)
+          cell.tvImageView.kf.setImage(with: url)
           
           return cell
-     }
-     
-     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-          return 176.0
-     }
-     
-     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-          let selectedItem = items[indexPath.row]
-          performSegue(withIdentifier: "showDetailsTV", sender: selectedItem)
-          
      }
      
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -115,6 +84,20 @@ class TVShowsViewController: UIViewController, UITableViewDelegate, UITableViewD
                destination.isTV = true
           }
      }
+}
+
+extension TVShowsViewController: UITableViewDelegate {
      
+     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+          items.count
+     }
      
+     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+          return 176.0
+     }
+     
+     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+          let selectedItem = items[indexPath.row]
+          performSegue(withIdentifier: "showDetailsTV", sender: selectedItem)
+     }
 }

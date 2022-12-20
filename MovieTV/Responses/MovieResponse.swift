@@ -1,10 +1,3 @@
-//
-//  MovieResponse.swift
-//  MovieTV
-//
-//  Created by Ş. Deniz Geçginer on 15.11.2022.
-//
-
 import Foundation
 
 struct MovieResponse: Decodable {
@@ -12,7 +5,6 @@ struct MovieResponse: Decodable {
     let results: [MovieItem]
     let total_results: Int
     let total_pages: Int
-    
 }
 
 struct MovieItem: Decodable {

@@ -1,21 +1,11 @@
-//
-//  TVShowsResponse.swift
-//  MovieTV
-//
-//  Created by Ş. Deniz Geçginer on 20.11.2022.
-//
-
 import Foundation
-
 
 struct TVShowsResponse: Decodable {
     let page: Int
     let results: [TVItem]
     let total_results: Int
     let total_pages: Int
-    
 }
-
 struct TVItem: Decodable {
     let poster_path: String
     let overview: String

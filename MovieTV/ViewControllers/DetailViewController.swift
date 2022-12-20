@@ -1,209 +1,162 @@
-//
-//  DetailViewController.swift
-//  MovieTV
-//
-//  Created by Ş. Deniz Geçginer on 31.10.2022.
-//
-
 import UIKit
 import Alamofire
 import Kingfisher
 
-class DetailViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+enum DetectingShowType: Int {
+    case movie = 0
+    case tv = 1
+}
+
+class DetailViewController: UIViewController {
     
-    var tvCast: [TVCast] = []
-    var movieCast: [MovieCast] = []
-    
-    var detailItems: DetailItem!
-    var tvDetailItems: TVDetailItem!
-    
-    @IBOutlet weak var detailImg: UIImageView!
-    @IBOutlet weak var detailName: UILabel!
-    @IBOutlet weak var detailRating: UILabel!
-    @IBOutlet weak var detailPopularity: UILabel!
-    @IBOutlet weak var detailRuntime: UILabel!
-    @IBOutlet weak var detailOverview: UILabel!
-    
-    
-    var itemId: Int!
-    var isMovie: Bool!
-    var isTV: Bool!
+    var cast: [Cast] = []
+    var detailItems: DetailItem?
+    var itemId: Int?
+    var isMovie: Bool?
+    var isTV: Bool?
+    var detectedShowType: Int = 0
+    var showType: String = ""
+    private let apiKey = "2dbd75835d31fe29e22c5fcc1f402b7c"
     
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var detailImageView: UIImageView!
+    @IBOutlet weak var detailNameLabel: UILabel!
+    @IBOutlet weak var detailRatingLabel: UILabel!
+    @IBOutlet weak var detailPopularityLabel: UILabel!
+    @IBOutlet weak var detailRuntimeLabel: UILabel!
+    @IBOutlet weak var detailOverviewLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         collectionView.delegate = self
         collectionView.dataSource = self
-        
-        
-        if isMovie == true {
-            fetchMovieDetails()
-            MovieCastDetails()
-            
-        } else if isTV == true {
-            fetchTVDetails()
-            TVCastDetails()
-        }
-        
+        fetchMovieOrTVDetailsIfNeeded()
     }
     
-    func fetchMovieDetails() {
-        let request = AF.request("https://api.themoviedb.org/3/movie/\(itemId!)?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US")
-        /* request.responseJSON { (data) in
-         // print(data)
-         } */
-        request.responseDecodable(of: DetailItem.self) { [self] (response) in
-            
+    private func fetchMovieDetails() {
+        fetchDetail()
+    }
+    
+    private func fetchTVDetails() {
+        fetchDetail()
+    }
+    
+    private func fetchDetail() {
+        selectingShowType()
+        let request = AF.request("https://api.themoviedb.org/3/\(showType)/\(itemId!)?api_key=\(apiKey)&language=en-US")
+        request.responseDecodable(of: DetailItem.self) { [weak self] (response) in
+            guard let self = self else { return }
             switch response.result {
             case .success(_):
                 guard let details = response.value else { return }
-                // print(details)
                 self.detailItems = details
-                detailName.text = detailItems.original_title
-                detailRating.text = String(detailItems.vote_average)
-                detailPopularity.text = String(detailItems.popularity)
-                detailOverview.text = detailItems.overview
-                detailRuntime.text = "\(String(detailItems.runtime)) min"
-                
-                // image
-                detailImg.kf.indicatorType = .activity
+                guard let detailItems = self.detailItems else { return }
+                self.detailRatingLabel.text = String(detailItems.vote_average)
+                self.detailPopularityLabel.text = String(detailItems.popularity)
+                self.detailOverviewLabel.text = detailItems.overview
+                self.detailImageView.kf.indicatorType = .activity
                 let imgURL = "https://image.tmdb.org/t/p/w500\(detailItems.poster_path)"
                 let url = URL(string: imgURL)
-                detailImg.kf.setImage(with: url)
-                
+                self.detailImageView.kf.setImage(with: url)
+                if self.showType == "movie" {
+                    self.detailNameLabel.text = detailItems.original_title
+                    guard let movieRuntime = detailItems.runtime else { return }
+                    self.detailRuntimeLabel.text = "\(String(movieRuntime)) min"
+                } else if self.showType == "tv" {
+                    self.detailNameLabel.text = detailItems.original_name
+                    guard let tvRuntime = detailItems.episode_run_time else { return }
+                    self.detailRuntimeLabel.text = "\(String(tvRuntime)) min"
+                }
             case .failure(let DecodingError):
                 print(DecodingError)
             }
         }
     }
     
-    func fetchTVDetails() {
-        let request = AF.request("https://api.themoviedb.org/3/tv/\(itemId!)?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US")
-        /* request.responseJSON { (data) in
-         // print(data)
-         } */
-        request.responseDecodable(of: TVDetailItem.self) { [self] (response) in
-            
-            switch response.result {
-            case .success(_):
-                guard let tvDetails = response.value else { return }
-                // print(details)
-                self.tvDetailItems = tvDetails
-                detailName.text = tvDetailItems.original_name
-                detailRating.text = String(tvDetailItems.vote_average)
-                detailPopularity.text = String(tvDetailItems.popularity)
-                detailOverview.text = tvDetailItems.overview
-                detailRuntime.text = "\(String(tvDetailItems.episode_run_time)) min"
-
-                // image
-                detailImg.kf.indicatorType = .activity
-                let imgURL = "https://image.tmdb.org/t/p/w500\(tvDetailItems.poster_path)"
-                let url = URL(string: imgURL)
-                detailImg.kf.setImage(with: url)
-                
-            case .failure(let DecodingError):
-                print(DecodingError)
-            }
-        }
+    private func fetchTVCastDetails() {
+        fetchCastDetails()
     }
     
+    private func fetchMovieCastDetails() {
+        fetchCastDetails()
+    }
     
-    
-    func TVCastDetails() {
-        let request = AF.request("https://api.themoviedb.org/3/tv/\(itemId!)/credits?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US")
-        
-        request.responseDecodable(of: TVCastResponse.self) { [self] (response) in
-            
+    private func fetchCastDetails() {
+        selectingShowType()
+        let request = AF.request("https://api.themoviedb.org/3/\(showType)/\(itemId!)/credits?api_key=\(apiKey)&language=en-US")
+        request.responseDecodable(of: CastResponse.self) { [weak self] (response) in
+            guard let self = self else { return }
             switch response.result {
             case .success(_):
-                guard let tvCastDetails = response.value else { return }
-                print(tvCastDetails)
-                self.tvCast = tvCastDetails.cast
+                guard let castDetails = response.value else { return }
+                print(castDetails)
+                self.cast = castDetails.cast
                 self.collectionView.reloadData()
-
-                
             case .failure(let DecodingError):
                 print(DecodingError)
             }
         }
     }
     
-    func MovieCastDetails() {
-        let request = AF.request("https://api.themoviedb.org/3/movie/\(itemId!)/credits?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US")
-        
-        request.responseDecodable(of: MovieCastResponse.self) { [self] (response) in
-            
-            switch response.result {
-            case .success(_):
-                guard let movieCastDetails = response.value else { return }
-                print(movieCastDetails)
-                self.movieCast = movieCastDetails.cast
-                self.collectionView.reloadData()
-
-                
-            case .failure(let DecodingError):
-                print(DecodingError)
-            }
-        }
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func fetchMovieOrTVDetailsIfNeeded() {
         if isMovie == true {
-            return movieCast.count
+            fetchMovieDetails()
+            fetchMovieCastDetails()
+            detectedShowType = 0
+            
         } else if isTV == true {
-            return tvCast.count
-        } else {
-            return 0
+            fetchTVDetails()
+            fetchTVCastDetails()
+            detectedShowType = 1
         }
     }
+    
+    func selectingShowType() {
+        let selectedShow = DetectingShowType(rawValue: detectedShowType)
+        switch selectedShow {
+        case .movie:
+            showType = "movie"
+        case .tv:
+            showType = "tv"
+        case .none:
+            break
+        }
+    }
+}
+
+extension DetailViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CastCollectionViewCell
         if isMovie == true {
-            cell.actName.text = movieCast[indexPath.item].original_name
-            cell.charName.text = movieCast[indexPath.item].character
-            
-            cell.actImg.kf.indicatorType = .activity
-            guard let profilePath = movieCast[indexPath.item].profile_path else {return cell}
-            let imgURL = "https://image.tmdb.org/t/p/w500\(profilePath)"
+            cell.actNameLabel.text = cast[indexPath.item].original_name
+            cell.charNameLabel.text = cast[indexPath.item].character
+            cell.actImageView.kf.indicatorType = .activity
+            guard let movieProfilePath = cast[indexPath.item].profile_path else {return cell}
+            let imgURL = "https://image.tmdb.org/t/p/w500\(movieProfilePath)"
             let url = URL(string: imgURL)
-            cell.actImg.kf.setImage(with: url)
+            cell.actImageView.kf.setImage(with: url)
             return cell
             
         } else if isTV == true {
-            cell.actName.text = tvCast[indexPath.item].original_name
-            cell.charName.text = tvCast[indexPath.item].character
-            
-            cell.actImg.kf.indicatorType = .activity
-            guard let tvProfilePath = tvCast[indexPath.item].profile_path else {return cell}
+            cell.actNameLabel.text = cast[indexPath.item].original_name
+            cell.charNameLabel.text = cast[indexPath.item].character
+            cell.actImageView.kf.indicatorType = .activity
+            guard let tvProfilePath = cast[indexPath.item].profile_path else {return cell}
             let imgURL = "https://image.tmdb.org/t/p/w500\(tvProfilePath)"
             let url = URL(string: imgURL)
-            cell.actImg.kf.setImage(with: url)
+            cell.actImageView.kf.setImage(with: url)
             return cell
-            
-        } else {
-            print("error")
-        }
-        
+        } else {}
         return cell
     }
+}
+
+extension DetailViewController: UICollectionViewDelegate {
     
-    /*func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        return CGSize(width: UIScreen.main.bounds.width/3-16, height: UIScreen.main.bounds.width/3+30)
-    } */
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return cast.count
+    }
 }
 

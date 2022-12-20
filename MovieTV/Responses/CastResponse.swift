@@ -1,22 +1,13 @@
-//
-//  MovieCastResponse.swift
-//  MovieTV
-//
-//  Created by Ş. Deniz Geçginer on 7.12.2022.
-//
-
 import Foundation
 
-struct MovieCastResponse: Decodable {
-    let id: Int
-    let cast: [MovieCast]
-    
+struct CastResponse: Decodable {
+    let id: Int?
+    let cast: [Cast]
 }
 
-struct MovieCast: Decodable {
-   // let adult: Bool
+struct Cast: Decodable {
     let gender: Int
-    let id: Int
+    let id: Int?
     let known_for_department: String
     let name: String
     let original_name: String

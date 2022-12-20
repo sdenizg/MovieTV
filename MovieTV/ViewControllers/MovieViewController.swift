@@ -1,10 +1,3 @@
-//
-//  MovieViewController.swift
-//  MovieTV
-//
-//  Created by Ş. Deniz Geçginer on 18.10.2022.
-//
-
 import UIKit
 import Alamofire
 import Kingfisher
@@ -15,12 +8,14 @@ enum TabType: Int {
     case topRated = 2
 }
 
-class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MovieViewController: UIViewController {
     
+    @IBOutlet weak var tableView: UITableView!
     var items: [MovieItem] = []
+    private let apiKey = "2dbd75835d31fe29e22c5fcc1f402b7c"
+
     
-    @IBAction func mySegmentedCntrl(_ sender: UISegmentedControl) {
-        
+    @IBAction private func movieSegmentedControl(_ sender: UISegmentedControl) {
         let sended = sender.selectedSegmentIndex
         let selectedTab = TabType(rawValue: sended)
         
@@ -36,8 +31,6 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    @IBOutlet weak var tableView: UITableView!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,79 +38,44 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.dataSource = self
         
         fetchPopularMovies()
-        /* fetchTopRatedMovies()
-         fetchNowPlayingMovies() */
     }
     
-    func fetchPopularMovies() {
-        let request = AF.request("https://api.themoviedb.org/3/movie/popular?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US&page=1")
-        request.responseJSON { (data) in
-            //  print(data)
-        }
-        request.responseDecodable(of: MovieResponse.self) { (response) in
+    private func fetchPopularMovies() {
+        let request = AF.request("https://api.themoviedb.org/3/movie/popular?api_key=\(apiKey)&language=en-US&page=1")
+        request.responseDecodable(of: MovieResponse.self) { [weak self] (response) in
+            guard let self = self else { return }
             guard let popularMovies = response.value else { return }
-            // print(popularMovies)
             self.items = popularMovies.results
             self.tableView.reloadData()
-            
         }
     }
     
-    func fetchTopRatedMovies() {
-        let request = AF.request("https://api.themoviedb.org/3/movie/top_rated?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US&page=1")
-        request.responseJSON { (data) in
-            // print(data)
-        }
-        request.responseDecodable(of: MovieResponse.self) { (response) in
+    private func fetchTopRatedMovies() {
+        let request = AF.request("https://api.themoviedb.org/3/movie/top_rated?api_key=\(apiKey)&language=en-US&page=1")
+        request.responseDecodable(of: MovieResponse.self) { [weak self] (response) in
+            guard let self = self else { return }
             guard let topRatedMovies = response.value else { return }
-            // print(topRatedMovies)
             self.items = topRatedMovies.results
             self.tableView.reloadData()
-            
         }
     }
     
-    func fetchNowPlayingMovies() {
-        let request = AF.request("https://api.themoviedb.org/3/movie/now_playing?api_key=2dbd75835d31fe29e22c5fcc1f402b7c&language=en-US&page=1")
-        request.responseJSON { (data) in
-            // print(data)
-        }
-        request.responseDecodable(of: MovieResponse.self) { (response) in
+    private func fetchNowPlayingMovies() {
+        let request = AF.request("https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)&language=en-US&page=1")
+        request.responseDecodable(of: MovieResponse.self) { [weak self] (response) in
+            guard let self = self else { return }
             guard let nowPlayingMovies = response.value else { return }
-            // print(nowPlayingMovies)
             self.items = nowPlayingMovies.results
             self.tableView.reloadData()
-            
         }
     }
-    
-    
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        items.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! MovieTableViewCell
-        
-        cell.movieName.text = items[indexPath.row].title
-        cell.movieViewNum.text = String(items[indexPath.row].popularity)
-        cell.movieDate.text = items[indexPath.row].release_date
-        cell.movieRating.text = String(items[indexPath.row].vote_average)
-        //cell.movieImg.image = UIImage(named: items[indexPath.row].poster_path)!
-        
-        cell.movieImg.kf.indicatorType = .activity
-        let imgURL = "https://image.tmdb.org/t/p/w500\(items[indexPath.row].poster_path)"
-        let url = URL(string: imgURL)
-        cell.movieImg.kf.setImage(with: url)
-        
-        return cell
-    }
+}
+
+extension MovieViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedItem = items[indexPath.row]
         performSegue(withIdentifier: "showDetailsMovie", sender: selectedItem)
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -127,19 +85,26 @@ class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDat
             destination.isMovie = true
         }
     }
+}
+
+extension MovieViewController: UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        items.count
+    }
     
-    
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! MovieTableViewCell
+        
+        cell.movieNameLabel.text = items[indexPath.row].title
+        cell.movieViewNumLabel.text = String(items[indexPath.row].popularity)
+        cell.movieDateLabel.text = items[indexPath.row].release_date
+        cell.movieRatingLabel.text = String(items[indexPath.row].vote_average)
+        cell.movieImageView.kf.indicatorType = .activity
+        let imgURL = "https://image.tmdb.org/t/p/w500\(items[indexPath.row].poster_path)"
+        let url = URL(string: imgURL)
+        cell.movieImageView.kf.setImage(with: url)
+        
+        return cell
+    }
 }
