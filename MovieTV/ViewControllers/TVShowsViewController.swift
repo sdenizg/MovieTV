@@ -52,9 +52,14 @@ class TVShowsViewController: UIViewController {
           let request = AF.request("https://api.themoviedb.org/3/tv/\(tvProgrammeType)?api_key=\(apiKey)&language=en-US&page=1")
           request.responseDecodable(of: TVShowsResponse.self) { [weak self] (response) in
                guard let self = self else { return }
-               guard let tvShows = response.value else { return }
-               self.items = tvShows.results
-               self.tableView.reloadData()
+               switch response.result {
+               case .success(_):
+                    guard let tvShows = response.value else { return }
+                    self.items = tvShows.results
+                    self.tableView.reloadData()
+               case .failure(let DecodingError):
+                   print(DecodingError)
+               }
           }
      }
 }
@@ -63,7 +68,6 @@ extension TVShowsViewController: UITableViewDataSource {
      
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
           let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TVTableViewCell
-          
           cell.tvNameLabel.text = items[indexPath.row].originalName
           cell.tvViewNumLabel.text = String(items[indexPath.row].popularity)
           cell.tvDateLabel.text = items[indexPath.row].firstAirDate
@@ -72,7 +76,6 @@ extension TVShowsViewController: UITableViewDataSource {
           let imgURL = "https://image.tmdb.org/t/p/w500\(items[indexPath.row].posterPath)"
           let url = URL(string: imgURL)
           cell.tvImageView.kf.setImage(with: url)
-          
           return cell
      }
      

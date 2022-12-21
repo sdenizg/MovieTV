@@ -5,7 +5,7 @@ struct TVShowsResponse: Decodable {
     
     enum TVShowsResponseCodingKeys: String, CodingKey {
         case results
-   }
+    }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: TVShowsResponseCodingKeys.self)

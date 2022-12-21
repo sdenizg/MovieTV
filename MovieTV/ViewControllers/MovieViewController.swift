@@ -59,9 +59,14 @@ class MovieViewController: UIViewController {
         let request = AF.request("https://api.themoviedb.org/3/movie/\(movieType)?api_key=\(apiKey)&language=en-US&page=1")
         request.responseDecodable(of: MovieResponse.self) { [weak self] (response) in
             guard let self = self else { return }
-            guard let movies = response.value else { return }
-            self.items = movies.results
-            self.tableView.reloadData()
+            switch response.result {
+            case .success(_):
+                guard let movies = response.value else { return }
+                self.items = movies.results
+                self.tableView.reloadData()
+            case .failure(let DecodingError):
+                print(DecodingError)
+            }
         }
     }
 }
@@ -90,7 +95,6 @@ extension MovieViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! MovieTableViewCell
-        
         cell.movieNameLabel.text = items[indexPath.row].title
         cell.movieViewNumLabel.text = String(items[indexPath.row].popularity)
         cell.movieDateLabel.text = items[indexPath.row].releaseDate

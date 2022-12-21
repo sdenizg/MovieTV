@@ -140,7 +140,6 @@ extension DetailViewController: UICollectionViewDataSource {
             let url = URL(string: imgURL)
             cell.actImageView.kf.setImage(with: url)
             return cell
-            
         } else if isTV == true {
             cell.actNameLabel.text = cast[indexPath.item].originalName
             cell.charNameLabel.text = cast[indexPath.item].character
