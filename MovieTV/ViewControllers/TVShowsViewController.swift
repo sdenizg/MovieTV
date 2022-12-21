@@ -64,12 +64,12 @@ extension TVShowsViewController: UITableViewDataSource {
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
           let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TVTableViewCell
           
-          cell.tvNameLabel.text = items[indexPath.row].original_name
+          cell.tvNameLabel.text = items[indexPath.row].originalName
           cell.tvViewNumLabel.text = String(items[indexPath.row].popularity)
-          cell.tvDateLabel.text = items[indexPath.row].first_air_date
-          cell.tvRatingLabel.text = String(items[indexPath.row].vote_average)
+          cell.tvDateLabel.text = items[indexPath.row].firstAirDate
+          cell.tvRatingLabel.text = String(items[indexPath.row].voteAverage)
           cell.tvImageView.kf.indicatorType = .activity
-          let imgURL = "https://image.tmdb.org/t/p/w500\(items[indexPath.row].poster_path)"
+          let imgURL = "https://image.tmdb.org/t/p/w500\(items[indexPath.row].posterPath)"
           let url = URL(string: imgURL)
           cell.tvImageView.kf.setImage(with: url)
           

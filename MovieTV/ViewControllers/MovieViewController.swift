@@ -93,10 +93,10 @@ extension MovieViewController: UITableViewDelegate {
         
         cell.movieNameLabel.text = items[indexPath.row].title
         cell.movieViewNumLabel.text = String(items[indexPath.row].popularity)
-        cell.movieDateLabel.text = items[indexPath.row].release_date
-        cell.movieRatingLabel.text = String(items[indexPath.row].vote_average)
+        cell.movieDateLabel.text = items[indexPath.row].releaseDate
+        cell.movieRatingLabel.text = String(items[indexPath.row].voteAverage)
         cell.movieImageView.kf.indicatorType = .activity
-        let imgURL = "https://image.tmdb.org/t/p/w500\(items[indexPath.row].poster_path)"
+        let imgURL = "https://image.tmdb.org/t/p/w500\(items[indexPath.row].posterPath)"
         let url = URL(string: imgURL)
         cell.movieImageView.kf.setImage(with: url)
         

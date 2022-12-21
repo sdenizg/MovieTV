@@ -1,22 +1,31 @@
 import Foundation
 
 struct TVShowsResponse: Decodable {
-    let page: Int
     let results: [TVItem]
-    let total_results: Int
-    let total_pages: Int
+    
+    enum TVShowsResponseCodingKeys: String, CodingKey {
+        case results
+   }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: TVShowsResponseCodingKeys.self)
+        results = try container.decode([TVItem].self, forKey: .results)
+    }
 }
 struct TVItem: Decodable {
-    let poster_path: String
-    let overview: String
-    let first_air_date: String
-    let genre_ids = [Int]()
+    let posterPath: String
     let id: Int
-    let origin_country = [String]()
-    let original_name: String
-    let original_language : String
-    let backdrop_path: String?
+    let originalName: String
     let popularity: Double
-    let vote_count: Int
-    let vote_average: Float
+    let voteAverage: Float
+    let firstAirDate: String
+    
+    enum CodingKeys: String, CodingKey {
+        case posterPath = "poster_path"
+        case originalName = "original_name"
+        case firstAirDate = "first_air_date"
+        case voteAverage = "vote_average"
+        case id
+        case popularity
+    }
 }

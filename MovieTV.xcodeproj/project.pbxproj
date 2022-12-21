@@ -59,6 +59,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4D4DA89629522E7900E88C43 /* CollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				4DADB4C32940BE1200FEC1E1 /* CastCollectionViewCell.swift */,
+			);
+			path = CollectionViewCell;
+			sourceTree = "<group>";
+		};
 		4D820929293629D40096C3D1 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -74,7 +82,6 @@
 			children = (
 				4DB25A052913D4EB00F601E4 /* TVTableViewCell.swift */,
 				4DB25A032913CCF400F601E4 /* MovieTableViewCell.swift */,
-				4DADB4C32940BE1200FEC1E1 /* CastCollectionViewCell.swift */,
 			);
 			path = TableViewcell;
 			sourceTree = "<group>";
@@ -113,6 +120,7 @@
 				4D4DA8932951E88E00E88C43 /* SceneDelegate.swift */,
 				4D820929293629D40096C3D1 /* ViewControllers */,
 				4D82092A29362A030096C3D1 /* TableViewcell */,
+				4D4DA89629522E7900E88C43 /* CollectionViewCell */,
 				4D82092D29362A3F0096C3D1 /* Responses */,
 				4DAD79BB28FEE0FC00C5CF7A /* Main.storyboard */,
 				4DAD79BE28FEE10500C5CF7A /* Assets.xcassets */,

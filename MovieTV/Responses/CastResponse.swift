@@ -3,18 +3,23 @@ import Foundation
 struct CastResponse: Decodable {
     let id: Int?
     let cast: [Cast]
+    
+    enum CastResponseCodingKeys: String, CodingKey {
+        case id
+        case cast
+    }
 }
 
 struct Cast: Decodable {
-    let gender: Int
     let id: Int?
-    let known_for_department: String
-    let name: String
-    let original_name: String
-    let popularity: Double
-    let profile_path : String?
-    let cast_id: Int
+    let originalName: String?
+    let profilePath : String?
     let character: String
-    let credit_id: String
-    let order: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case originalName = "original_name"
+        case profilePath = "profile_path"
+        case id
+        case character
+    }
 }

@@ -52,20 +52,22 @@ class DetailViewController: UIViewController {
                 guard let details = response.value else { return }
                 self.detailItems = details
                 guard let detailItems = self.detailItems else { return }
-                self.detailRatingLabel.text = String(detailItems.vote_average)
+                self.detailRatingLabel.text = String(detailItems.voteAverage)
                 self.detailPopularityLabel.text = String(detailItems.popularity)
                 self.detailOverviewLabel.text = detailItems.overview
                 self.detailImageView.kf.indicatorType = .activity
-                let imgURL = "https://image.tmdb.org/t/p/w500\(detailItems.poster_path)"
+                let imgURL = "https://image.tmdb.org/t/p/w500\(detailItems.posterPath)"
                 let url = URL(string: imgURL)
                 self.detailImageView.kf.setImage(with: url)
                 if self.showType == "movie" {
-                    self.detailNameLabel.text = detailItems.original_title
+                    guard let movieOriginalTitle = detailItems.originalTitle else { return }
+                    self.detailNameLabel.text = movieOriginalTitle
                     guard let movieRuntime = detailItems.runtime else { return }
                     self.detailRuntimeLabel.text = "\(String(movieRuntime)) min"
                 } else if self.showType == "tv" {
-                    self.detailNameLabel.text = detailItems.original_name
-                    guard let tvRuntime = detailItems.episode_run_time else { return }
+                    guard let tvOriginalName = detailItems.originalName else { return }
+                    self.detailNameLabel.text = tvOriginalName
+                    guard let tvRuntime = detailItems.episodeRunTime else { return }
                     self.detailRuntimeLabel.text = "\(String(tvRuntime)) min"
                 }
             case .failure(let DecodingError):
@@ -130,20 +132,20 @@ extension DetailViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CastCollectionViewCell
         if isMovie == true {
-            cell.actNameLabel.text = cast[indexPath.item].original_name
+            cell.actNameLabel.text = cast[indexPath.item].originalName
             cell.charNameLabel.text = cast[indexPath.item].character
             cell.actImageView.kf.indicatorType = .activity
-            guard let movieProfilePath = cast[indexPath.item].profile_path else {return cell}
+            guard let movieProfilePath = cast[indexPath.item].profilePath else {return cell}
             let imgURL = "https://image.tmdb.org/t/p/w500\(movieProfilePath)"
             let url = URL(string: imgURL)
             cell.actImageView.kf.setImage(with: url)
             return cell
             
         } else if isTV == true {
-            cell.actNameLabel.text = cast[indexPath.item].original_name
+            cell.actNameLabel.text = cast[indexPath.item].originalName
             cell.charNameLabel.text = cast[indexPath.item].character
             cell.actImageView.kf.indicatorType = .activity
-            guard let tvProfilePath = cast[indexPath.item].profile_path else {return cell}
+            guard let tvProfilePath = cast[indexPath.item].profilePath else {return cell}
             let imgURL = "https://image.tmdb.org/t/p/w500\(tvProfilePath)"
             let url = URL(string: imgURL)
             cell.actImageView.kf.setImage(with: url)

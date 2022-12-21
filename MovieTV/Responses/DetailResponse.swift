@@ -2,13 +2,24 @@ import Foundation
 
 struct DetailItem: Decodable {
     let id: Int?
-    let original_title: String?
-    let original_name: String?
+    let originalTitle: String?
+    let originalName: String?
     let overview: String
     let popularity: Double
-    let poster_path: String
+    let posterPath: String
     let runtime: Int?
-    var episode_run_time: Int?
-    let vote_average: Float
-    let vote_count: Int
+    var episodeRunTime: Int?
+    let voteAverage: Float
+    
+    enum CodingKeys: String, CodingKey {
+        case originalTitle = "original_title"
+        case posterPath = "poster_path"
+        case episodeRunTime = "episode_run_time"
+        case voteAverage = "vote_average"
+        case id
+        case overview
+        case popularity
+        case runtime
+        case originalName = "original_name"
+    }
 }
