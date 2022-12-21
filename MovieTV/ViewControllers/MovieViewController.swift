@@ -10,11 +10,11 @@ enum TabType: Int {
 
 class MovieViewController: UIViewController {
     
-    @IBOutlet weak var tableView: UITableView!
     var items: [MovieItem] = []
     private let apiKey = "2dbd75835d31fe29e22c5fcc1f402b7c"
     var movieType: String = ""
-    
+    @IBOutlet weak var tableView: UITableView!
+
     @IBAction private func movieSegmentedControl(_ sender: UISegmentedControl) {
         let sended = sender.selectedSegmentIndex
         let selectedTab = TabType(rawValue: sended)
@@ -41,8 +41,6 @@ class MovieViewController: UIViewController {
         tableView.dataSource = self
         
         fetchPopularMovies()
-        
-        UITabBar.appearance().barTintColor = UIColor.black 
     }
     
     private func fetchPopularMovies() {

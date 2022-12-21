@@ -9,12 +9,12 @@ enum TVTabType: Int {
 
 class TVShowsViewController: UIViewController {
      
-     @IBOutlet weak var tableView: UITableView!
      var items: [TVItem] = []
      var itemId: Int?
      var isTV: Bool?
      private let apiKey = "2dbd75835d31fe29e22c5fcc1f402b7c"
      var tvProgrammeType: String = ""
+     @IBOutlet weak var tableView: UITableView!
      
      @IBAction private func tvSegmentedControl(_ sender: UISegmentedControl) {
           let sended = sender.selectedSegmentIndex
@@ -39,8 +39,6 @@ class TVShowsViewController: UIViewController {
           tableView.dataSource = self
           
           fetchPopularTVShows()
-          
-          UITabBar.appearance().barTintColor = UIColor.black 
      }
      
      private func fetchPopularTVShows() {
@@ -60,7 +58,7 @@ class TVShowsViewController: UIViewController {
                     self.items = tvShows.results
                     self.tableView.reloadData()
                case .failure(let DecodingError):
-                   print(DecodingError)
+                    print(DecodingError)
                }
           }
      }
