@@ -39,6 +39,8 @@ class TVShowsViewController: UIViewController {
           tableView.dataSource = self
           
           fetchPopularTVShows()
+          
+          UITabBar.appearance().barTintColor = UIColor.black 
      }
      
      private func fetchPopularTVShows() {

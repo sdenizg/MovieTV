@@ -41,6 +41,8 @@ class MovieViewController: UIViewController {
         tableView.dataSource = self
         
         fetchPopularMovies()
+        
+        UITabBar.appearance().barTintColor = UIColor.black 
     }
     
     private func fetchPopularMovies() {
@@ -76,6 +78,7 @@ extension MovieViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedItem = items[indexPath.row]
         performSegue(withIdentifier: "showDetailsMovie", sender: selectedItem)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
